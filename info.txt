@@ -1,0 +1,11 @@
+//Useful Links
+https://github.com/h4ck-rOOt/Lynda-Decryptor/issues/14
+https://stackoverflow.com/questions/33621963/how-to-find-and-play-videos-downloaded-by-lynda-com-android-or-windows-app#comment64210873_34764786
+
+
+
+
+
+//Personal Path
+--Raw file path while playing
+/Users/User/Library/Containers/com.lyndadotcom.lyndaosx/Data/Library/Caches/com.lyndadotcom.lyndaosx/offlnvds
