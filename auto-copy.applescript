@@ -1,4 +1,6 @@
 --https://developer.apple.com/library/content/documentation/AppleScript/Conceptual/AppleScriptLangGuide/reference/ASLR_cmds.html#//apple_ref/doc/uid/TP40000983-CH216-SW10
+
+--
 set dstFolder to "/Users/user/Desktop/lynda_course"
 set srcFolder to "/Users/User/Library/Containers/com.lyndadotcom.lyndaosx/Data/Library/Caches/com.lyndadotcom.lyndaosx/offlnvds"
 
@@ -41,12 +43,17 @@ global chaperIndex
 global chaperCourseIndex
 set chaperIndex to 0
 set chaperCourseIndex to 0
+
+--====================Main====================--
 tell application "System Events"
 	tell process "Lynda.com"
 		--click button "Next" of window 1
 		set courses to row of table 1 of scroll area 3 of window 1
 		set coursesSize to count of courses
 		set courseIndex to 0
+		set unitName to value of static text of window 1
+		log unitName
+		set dstFolder to dstFolder & "/" & my replaceFileOrPathName(unitName)
 		my doShellScript("rm -rf " & dstFolder & "/*")
 		repeat
 			set courseIndex to courseIndex + 1
