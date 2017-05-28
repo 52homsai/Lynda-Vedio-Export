@@ -19,12 +19,19 @@ on moveFileToFolder(srcFile, dstFolder, dstFileName)
 end moveFileToFolder
 
 on doShellScript(cmd)
+	log cmd
 	return do shell script cmd
 end doShellScript
 
 on replaceFileOrPathName(this_text)
 	set this_text to replace_chars(this_text, " ", "_")
 	set this_text to replace_chars(this_text, ",", "_")
+	set this_text to replace_chars(this_text, "-", "_")
+	set this_text to replace_chars(this_text, "?", "_")
+	set this_text to replace_chars(this_text, "!", "_")
+	set this_text to replace_chars(this_text, "\\", "_")
+	set this_text to replace_chars(this_text, "'", "_")
+	set this_text to replace_chars(this_text, "\"", "_")
 	return this_text
 end replaceFileOrPathName
 
@@ -36,6 +43,16 @@ on replace_chars(this_text, search_string, replacement_string)
 	set AppleScript's text item delimiters to ""
 	return this_text
 end replace_chars
+
+on trashAllFilesInFolder(folderSrc)
+try
+		my doShellScript("mkdir " & folderSrc)
+	end try
+	my doShellScript("/usr/local/bin/trash  " & folderSrc)
+	try
+		my doShellScript("mkdir " & folderSrc)
+	end try
+end trashAllFilesInFolder
 
 global courseName
 global chapterName
@@ -51,17 +68,16 @@ tell application "System Events"
 		set courses to row of table 1 of scroll area 3 of window 1
 		set coursesSize to count of courses
 		set courseIndex to 0
-		set unitName to value of static text of window 1
+		set unitName to value of static text 1 of window 1
 		log unitName
 		set dstFolder to dstFolder & "/" & my replaceFileOrPathName(unitName)
-		my doShellScript("rm -rf " & dstFolder & "/*")
+		my trashAllFilesInFolder(dstFolder)
 		repeat
 			set courseIndex to courseIndex + 1
 			if courseIndex > coursesSize then exit repeat
 			--Clear existing
-			set tmp to "rm -rf " & my replaceFileOrPathName(srcFolder) & "/*"
-			my doShellScript(tmp)
-			select row courseIndex of table 1 of scroll area 3 of window 1
+			my trashAllFilesInFolder(my replaceFileOrPathName(srcFolder))
+			log (select row courseIndex of table 1 of scroll area 3 of window 1)
 			
 			try
 				set courseName to value of static text of UI element 1 of row courseIndex of table 1 of scroll area 3 of window 1
